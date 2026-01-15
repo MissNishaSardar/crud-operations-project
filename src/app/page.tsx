@@ -2,8 +2,8 @@ import ReadUserCard from "@/components/ReadUserCard";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Next.js Starter Fullstack",
-	description: "Production grade Fullstack Next.js starter template",
+	title: "Home | CRUD Project",
+	description: "Home page of CRUD Project",
 };
 
 const page = () => {

@@ -2,29 +2,42 @@ import Image from "next/image";
 import { Button } from "./shadcnui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./shadcnui/card";
 import { Label } from "./shadcnui/label";
+import { BookUserIcon, MailCheckIcon, PhoneCallIcon } from "lucide-react";
 
 const ReadUserCard = () => {
 	return (
 		<section className="grid h-[90dvh] place-items-center">
 			<Card className="w-xs">
-				<CardHeader className="text-center text-2xl">
-					<div className="grid place-items-center justify-center">
+				<CardHeader className="text-center">
+					<div className="grid place-items-center justify-center gap-2">
 						<Image
 							src={"https://picsum.photos/200"}
 							alt=""
 							width={200}
 							height={200}
+							className="rounded-2xl"
 						/>
+						<h3 className="text-4xl font-semibold">User Fullname</h3>
+
+						<div className="flex gap-2">
+							<MailCheckIcon /> username@gmail.com
+						</div>
 					</div>
 				</CardHeader>
 
-				<CardContent>
-					<div className="grid gap-2">
-						<div className="">User Name</div>
-						<Label className="text-xl">User Email</Label>
-						<Label className="text-xl">User Gender</Label>
-						<Label className="text-xl">Mobile Number</Label>
-						<Label className="text-xl">Bio</Label>
+				<CardContent className="grid gap-2">
+					<div className="gap-2">
+						<Label className="text-xl">
+							<BookUserIcon /> Bio
+						</Label>
+						<p className="text-sm">
+							Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam,
+							repudiandae!
+						</p>
+					</div>
+					<div className="">User Gender</div>
+					<div className="flex gap-2">
+						<PhoneCallIcon /> 9876543210
 					</div>
 				</CardContent>
 
@@ -37,8 +50,9 @@ const ReadUserCard = () => {
 
 					<Button
 						type="submit"
-						className="cursor-pointer">
-						Submit
+						className="cursor-pointer"
+						variant={"destructive"}>
+						Delete
 					</Button>
 				</CardFooter>
 			</Card>
