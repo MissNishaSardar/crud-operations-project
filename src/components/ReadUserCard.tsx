@@ -1,26 +1,26 @@
+import { BookUserIcon, PhoneCallIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "./shadcnui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./shadcnui/card";
 import { Label } from "./shadcnui/label";
-import { BookUserIcon, MailCheckIcon, PhoneCallIcon } from "lucide-react";
 
 const ReadUserCard = () => {
 	return (
 		<section className="grid h-[90dvh] place-items-center">
 			<Card className="w-xs">
 				<CardHeader className="text-center">
-					<div className="grid place-items-center justify-center gap-2">
+					<div className="grid grid-cols-2 place-items-center gap-2">
 						<Image
 							src={"https://picsum.photos/200"}
 							alt=""
-							width={200}
-							height={200}
-							className="rounded-2xl"
+							width={100}
+							height={100}
+							className="rounded-full"
 						/>
-						<h3 className="text-4xl font-semibold">User Fullname</h3>
-
-						<div className="flex gap-2">
-							<MailCheckIcon /> username@gmail.com
+						<div className="">
+							<h3 className="text-2xl font-semibold">User Fullname</h3>
+							username@gmail.com
 						</div>
 					</div>
 				</CardHeader>
@@ -43,9 +43,9 @@ const ReadUserCard = () => {
 
 				<CardFooter className="grid grid-cols-2 gap-4">
 					<Button
-						type="submit"
+						type="reset"
 						className="cursor-pointer">
-						Edit
+						<Link href={"/edit"}>Edit</Link>
 					</Button>
 
 					<Button
