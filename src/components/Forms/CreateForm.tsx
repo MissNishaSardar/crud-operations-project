@@ -12,6 +12,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../shadcnui/select";
+import { Textarea } from "../shadcnui/textarea";
 
 const CreateForm = () => {
 	const { handleSubmit, control } = useForm({
@@ -34,24 +35,6 @@ const CreateForm = () => {
 			className="grid gap-4"
 			onSubmit={handleSubmit(handleCreateForm)}
 			noValidate>
-			<Controller
-				name="uImage"
-				control={control}
-				render={({ field, fieldState }) => (
-					<Field data-invalid={fieldState.invalid}>
-						<FieldLabel htmlFor={field.name}>User Image</FieldLabel>
-						<Input
-							{...field}
-							id={field.name}
-							aria-invalid={fieldState.invalid}
-							placeholder="Upload an image url"
-							autoComplete=""
-						/>
-						{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-					</Field>
-				)}
-			/>
-
 			<Controller
 				name="uName"
 				control={control}
@@ -88,26 +71,45 @@ const CreateForm = () => {
 				)}
 			/>
 
-			<Controller
-				name="uGender"
-				control={control}
-				render={({ field, fieldState }) => (
-					<Field data-invalid={fieldState.invalid}>
-						<FieldLabel htmlFor={field.name}>Gender</FieldLabel>
-						<Select>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Gender" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="male">Male</SelectItem>
-								<SelectItem value="female">Female</SelectItem>
-								<SelectItem value="others">Others</SelectItem>
-							</SelectContent>
-						</Select>
-						{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-					</Field>
-				)}
-			/>
+			<div className="grid grid-cols-2 gap-4">
+				<Controller
+					name="uImage"
+					control={control}
+					render={({ field, fieldState }) => (
+						<Field data-invalid={fieldState.invalid}>
+							<FieldLabel htmlFor={field.name}>User Image</FieldLabel>
+							<Input
+								{...field}
+								id={field.name}
+								aria-invalid={fieldState.invalid}
+								placeholder="Image url"
+								autoComplete=""
+							/>
+							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+						</Field>
+					)}
+				/>
+				<Controller
+					name="uGender"
+					control={control}
+					render={({ field, fieldState }) => (
+						<Field data-invalid={fieldState.invalid}>
+							<FieldLabel htmlFor={field.name}>Gender</FieldLabel>
+							<Select>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Gender" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="male">Male</SelectItem>
+									<SelectItem value="female">Female</SelectItem>
+									<SelectItem value="others">Others</SelectItem>
+								</SelectContent>
+							</Select>
+							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+						</Field>
+					)}
+				/>
+			</div>
 
 			<Controller
 				name="uPhoneNumber"
@@ -134,7 +136,7 @@ const CreateForm = () => {
 				render={({ field, fieldState }) => (
 					<Field data-invalid={fieldState.invalid}>
 						<FieldLabel htmlFor={field.name}>Bio</FieldLabel>
-						<Input
+						<Textarea
 							{...field}
 							id={field.name}
 							aria-invalid={fieldState.invalid}

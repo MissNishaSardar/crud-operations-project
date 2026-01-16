@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
 	reactCompiler: true,
 	typedRoutes: true,
 	images: {
-		remotePatterns: [new URL("https://picsum.photos/200/**")],
+		remotePatterns: [new URL("https://picsum.photos/**")],
 	},
 };
 
