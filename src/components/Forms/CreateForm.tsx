@@ -1,6 +1,7 @@
 "use client";
 import { formSchema } from "@/lib/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SparklesIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
@@ -12,6 +13,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../shadcnui/select";
+import { Separator } from "../shadcnui/separator";
 import { Textarea } from "../shadcnui/textarea";
 
 const CreateForm = () => {
@@ -152,6 +154,15 @@ const CreateForm = () => {
 				type="submit"
 				className="cursor-pointer">
 				Submit
+			</Button>
+
+			<Separator />
+
+			<Button
+				type="button"
+				variant={"outline"}
+				className="cursor-pointer">
+				<SparklesIcon /> Generate
 			</Button>
 		</form>
 	);

@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 const page = () => {
 	return (
 		<section className="grid h-[90dvh] place-items-center">
-			<Card className="w-xs">
+			<Card className="w-md">
 				<CardHeader className="text-center text-2xl">
-					<CardTitle>Register</CardTitle>
+					<CardTitle>Create</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<CreateForm />
