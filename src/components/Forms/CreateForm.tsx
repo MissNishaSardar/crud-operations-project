@@ -1,7 +1,9 @@
 "use client";
-import { formSchema } from "@/lib/zodSchema";
+
+import { formSchema, FormSchemaType } from "@/lib/zodSchema";
+import createUser from "@/server/createUser";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SparklesIcon } from "lucide-react";
+import { LoaderIcon, SparklesIcon, UserRoundPlusIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
@@ -17,7 +19,12 @@ import { Separator } from "../shadcnui/separator";
 import { Textarea } from "../shadcnui/textarea";
 
 const CreateForm = () => {
-	const { handleSubmit, control } = useForm({
+	const {
+		handleSubmit,
+		control,
+		formState: { isSubmitting },
+		reset,
+	} = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			uImage: "",
@@ -30,7 +37,12 @@ const CreateForm = () => {
 		mode: "all",
 	});
 
-	const handleCreateForm = () => {};
+	const handleCreateForm = async (userData: FormSchemaType) => {
+		await new Promise((r) => setTimeout(r, 1500));
+
+		reset();
+		await createUser(userData);
+	};
 
 	return (
 		<form
@@ -46,6 +58,7 @@ const CreateForm = () => {
 						<Input
 							{...field}
 							id={field.name}
+							type="text"
 							aria-invalid={fieldState.invalid}
 							placeholder="Enter your full name"
 							autoComplete="name"
@@ -64,6 +77,7 @@ const CreateForm = () => {
 						<Input
 							{...field}
 							id={field.name}
+							type="email"
 							aria-invalid={fieldState.invalid}
 							placeholder="Enter your email address"
 							autoComplete="email"
@@ -83,6 +97,7 @@ const CreateForm = () => {
 							<Input
 								{...field}
 								id={field.name}
+								type="url"
 								aria-invalid={fieldState.invalid}
 								placeholder="Image url"
 								autoComplete=""
@@ -97,14 +112,18 @@ const CreateForm = () => {
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
 							<FieldLabel htmlFor={field.name}>Gender</FieldLabel>
-							<Select>
-								<SelectTrigger className="w-full">
+							<Select
+								name={field.name}
+								value={field.value}
+								onValueChange={field.onChange}>
+								<SelectTrigger
+									className="w-full"
+									aria-invalid={fieldState.invalid}>
 									<SelectValue placeholder="Gender" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="male">Male</SelectItem>
 									<SelectItem value="female">Female</SelectItem>
-									<SelectItem value="others">Others</SelectItem>
 								</SelectContent>
 							</Select>
 							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -121,7 +140,7 @@ const CreateForm = () => {
 						<FieldLabel htmlFor={field.name}>Mobile Number</FieldLabel>
 						<Input
 							{...field}
-							type="number"
+							type="tel"
 							id={field.name}
 							aria-invalid={fieldState.invalid}
 							placeholder="Enter your mobile number"
@@ -152,8 +171,18 @@ const CreateForm = () => {
 
 			<Button
 				type="submit"
-				className="cursor-pointer">
-				Submit
+				className="cursor-pointer"
+				disabled={isSubmitting}>
+				{isSubmitting ? (
+					<>
+						<LoaderIcon className="animate-spin" /> Submitting
+					</>
+				) : (
+					<>
+						<UserRoundPlusIcon />
+						Submit
+					</>
+				)}
 			</Button>
 
 			<Separator />

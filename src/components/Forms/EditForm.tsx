@@ -1,6 +1,6 @@
 "use client";
 
-import { editFormSchema } from "@/lib/zodSchema";
+import { formSchema } from "@/lib/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
@@ -17,7 +17,7 @@ import { Textarea } from "../shadcnui/textarea";
 
 const EditForm = () => {
 	const { handleSubmit, control } = useForm({
-		resolver: zodResolver(editFormSchema),
+		resolver: zodResolver(formSchema),
 		defaultValues: {
 			uImage: "",
 			uName: "",
@@ -45,6 +45,7 @@ const EditForm = () => {
 						<Input
 							{...field}
 							id={field.name}
+							type="text"
 							aria-invalid={fieldState.invalid}
 							placeholder="Enter your full name"
 							autoComplete="name"
@@ -63,6 +64,7 @@ const EditForm = () => {
 						<Input
 							{...field}
 							id={field.name}
+							type="email"
 							aria-invalid={fieldState.invalid}
 							placeholder="Enter your email address"
 							autoComplete="email"
@@ -81,6 +83,7 @@ const EditForm = () => {
 							<Input
 								{...field}
 								id={field.name}
+								type="url"
 								aria-invalid={fieldState.invalid}
 								placeholder="Image url"
 								autoComplete=""
@@ -95,14 +98,18 @@ const EditForm = () => {
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
 							<FieldLabel htmlFor={field.name}>Gender</FieldLabel>
-							<Select>
-								<SelectTrigger className="w-full">
+							<Select
+								name={field.name}
+								value={field.value}
+								onValueChange={field.onChange}>
+								<SelectTrigger
+									className="w-full"
+									aria-invalid={fieldState.invalid}>
 									<SelectValue placeholder="Gender" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="male">Male</SelectItem>
 									<SelectItem value="female">Female</SelectItem>
-									<SelectItem value="others">Others</SelectItem>
 								</SelectContent>
 							</Select>
 							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -119,7 +126,7 @@ const EditForm = () => {
 						<FieldLabel htmlFor={field.name}>Mobile Number</FieldLabel>
 						<Input
 							{...field}
-							type="number"
+							type="tel"
 							id={field.name}
 							aria-invalid={fieldState.invalid}
 							placeholder="Enter your mobile number"
