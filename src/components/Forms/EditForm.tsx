@@ -1,7 +1,9 @@
 "use client";
 
-import { formSchema } from "@/lib/zodSchema";
+import { formSchema, FormSchemaType } from "@/lib/zodSchema";
+import editUser from "@/server/editUser";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderIcon, UserPenIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
@@ -16,7 +18,11 @@ import {
 import { Textarea } from "../shadcnui/textarea";
 
 const EditForm = () => {
-	const { handleSubmit, control } = useForm({
+	const {
+		handleSubmit,
+		control,
+		formState: { isSubmitting },
+	} = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			uImage: "",
@@ -29,7 +35,10 @@ const EditForm = () => {
 		mode: "all",
 	});
 
-	const handleEditForm = () => {};
+	const handleEditForm = async (editUserData: FormSchemaType) => {
+		await new Promise((r) => setTimeout(r, 1500));
+		editUser(editUserData);
+	};
 
 	return (
 		<form
@@ -157,8 +166,17 @@ const EditForm = () => {
 
 			<Button
 				type="submit"
-				className="cursor-pointer">
-				Submit
+				className="cursor-pointer"
+				disabled={isSubmitting}>
+				{isSubmitting ? (
+					<>
+						<LoaderIcon className="animate-spin" /> Editing
+					</>
+				) : (
+					<>
+						<UserPenIcon /> Edit
+					</>
+				)}
 			</Button>
 		</form>
 	);
