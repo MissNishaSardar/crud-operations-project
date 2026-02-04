@@ -1,11 +1,31 @@
-import { MailIcon, PhoneCallIcon, Trash2Icon, UserPenIcon } from "lucide-react";
+"use client";
+
+import {
+	LoaderIcon,
+	MailIcon,
+	PhoneCallIcon,
+	Trash2Icon,
+	UserPenIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "./shadcnui/button";
 import { Card, CardContent } from "./shadcnui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./shadcnui/tooltip";
+import { toast } from "react-toastify";
 
 const ReadUserCard = () => {
+	const [isDeleting, setIsDeleting] = useState(false);
+
+	const handelDelete = async () => {
+		setIsDeleting(true);
+		await new Promise((r) => setTimeout(r, 1500));
+		setIsDeleting(false);
+
+		toast.success("Delettion successful👍🏻");
+	};
+
 	return (
 		<Card className="w-sm">
 			<CardContent className="grid gap-2">
@@ -58,7 +78,6 @@ const ReadUserCard = () => {
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
-								asChild
 								size={"lg"}
 								className="cursor-pointer">
 								<Link href={"/edit"}>
@@ -72,10 +91,20 @@ const ReadUserCard = () => {
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
+								onClick={handelDelete}
 								className="cursor-pointer"
 								size={"lg"}
-								variant={"destructive"}>
-								<Trash2Icon />
+								variant={"destructive"}
+								disabled={isDeleting}>
+								{isDeleting ? (
+									<>
+										<LoaderIcon className="animate-spin" />
+									</>
+								) : (
+									<>
+										<Trash2Icon />
+									</>
+								)}
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>Delete</TooltipContent>

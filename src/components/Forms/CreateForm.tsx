@@ -17,6 +17,7 @@ import {
 } from "../shadcnui/select";
 import { Separator } from "../shadcnui/separator";
 import { Textarea } from "../shadcnui/textarea";
+import { toast } from "react-toastify";
 
 const CreateForm = () => {
 	const {
@@ -42,6 +43,8 @@ const CreateForm = () => {
 
 		reset();
 		await createUser(userData);
+
+		toast.success("🤩 Attempet Successfull");
 	};
 
 	return (
