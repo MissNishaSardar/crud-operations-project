@@ -4,7 +4,9 @@ import { formSchema, FormSchemaType } from "@/lib/zodSchema";
 import createUser from "@/server/createUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderIcon, SparklesIcon, UserRoundPlusIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
 import { Input } from "../shadcnui/input";
@@ -17,9 +19,10 @@ import {
 } from "../shadcnui/select";
 import { Separator } from "../shadcnui/separator";
 import { Textarea } from "../shadcnui/textarea";
-import { toast } from "react-toastify";
 
 const CreateForm = () => {
+	const { push } = useRouter();
+
 	const {
 		handleSubmit,
 		control,
@@ -39,12 +42,17 @@ const CreateForm = () => {
 	});
 
 	const handleCreateForm = async (userData: FormSchemaType) => {
+		const { isSuccess, message } = await createUser(userData);
+
 		await new Promise((r) => setTimeout(r, 1500));
 
-		reset();
-		await createUser(userData);
-
-		toast.success("🤩 Attempet Successfull");
+		if (isSuccess) {
+			toast.success(message);
+			reset();
+			push("/");
+		} else {
+			toast.error(message);
+		}
 	};
 
 	return (

@@ -1,5 +1,6 @@
 "use client";
 
+import deleteUser from "@/server/deleteUser";
 import {
 	LoaderIcon,
 	MailIcon,
@@ -10,28 +11,41 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { User } from "../../generated/prisma/client";
 import { Button } from "./shadcnui/button";
 import { Card, CardContent } from "./shadcnui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./shadcnui/tooltip";
-import { toast } from "react-toastify";
 
-const ReadUserCard = () => {
+type ReadUserCardProps = {
+	info: User;
+};
+
+const ReadUserCard = ({ info }: ReadUserCardProps) => {
+	const { uImage, uName, uGender, uBio, uPhoneNumber, uEmail, uid } = info;
+
 	const [isDeleting, setIsDeleting] = useState(false);
 
 	const handelDelete = async () => {
 		setIsDeleting(true);
-		await new Promise((r) => setTimeout(r, 1500));
-		setIsDeleting(false);
 
-		toast.success("Delettion successful👍🏻");
+		const { isSuccess, message } = await deleteUser(uid);
+
+		if (isSuccess) {
+			toast.success(message);
+		} else {
+			toast.error(message);
+		}
+
+		setIsDeleting(false);
 	};
 
 	return (
 		<Card className="w-sm">
 			<CardContent className="grid gap-2">
 				<Image
-					src={"https://picsum.photos/334"}
-					alt=""
+					src={uImage}
+					alt={`${uName}'s avater`}
 					width={334}
 					height={334}
 					className="h-auto w-full rounded-sm"
@@ -39,13 +53,14 @@ const ReadUserCard = () => {
 
 				<div className="flex items-center gap-4">
 					<span className="text-3xl font-semibold">
-						User Fullname <span className="bg-secondary rounded-full">👩🏻</span>
+						{uName}{" "}
+						<span className="bg-secondary rounded-full">
+							{uGender === "male" ? "🧔🏻‍♂️" : "👩🏻"}
+						</span>
 					</span>
 				</div>
 
-				<div className="text-sm">
-					Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-				</div>
+				<div className="text-sm">{uBio}</div>
 
 				<div className="grid grid-cols-4 gap-4">
 					<Tooltip>
@@ -54,12 +69,12 @@ const ReadUserCard = () => {
 								size={"lg"}
 								className="cursor-pointer"
 								asChild>
-								<Link href={`tel:+919876543210`}>
+								<a href={`tel:+91${uPhoneNumber}`}>
 									<PhoneCallIcon />
-								</Link>
+								</a>
 							</Button>
 						</TooltipTrigger>
-						<TooltipContent>9876543210</TooltipContent>
+						<TooltipContent>{uPhoneNumber}</TooltipContent>
 					</Tooltip>
 
 					<Tooltip>
@@ -67,12 +82,12 @@ const ReadUserCard = () => {
 							<Button
 								size={"lg"}
 								className="cursor-pointer">
-								<Link href={`mailto:username@gmail.com`}>
+								<Link href={`mailto:${uEmail}`}>
 									<MailIcon />
 								</Link>
 							</Button>
 						</TooltipTrigger>
-						<TooltipContent>username@gmail.com</TooltipContent>
+						<TooltipContent>{uEmail}</TooltipContent>
 					</Tooltip>
 
 					<Tooltip>

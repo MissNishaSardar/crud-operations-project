@@ -1,14 +1,15 @@
 "use server";
 
 import prisma from "@/lib/database/dbClient";
-import { FormSchemaType } from "@/lib/zodSchema";
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace";
 
-const createUser = async (userData: FormSchemaType) => {
+const deleteUser = async (userId: string) => {
 	try {
-		await prisma.user.create({
-			data: userData,
+		await prisma.user.delete({
+			where: {
+				uid: userId,
+			},
 		});
 
 		revalidatePath("/");
@@ -32,4 +33,4 @@ const createUser = async (userData: FormSchemaType) => {
 	}
 };
 
-export default createUser;
+export default deleteUser;
