@@ -95,7 +95,7 @@ const ReadUserCard = ({ info }: ReadUserCardProps) => {
 							<Button
 								size={"lg"}
 								className="cursor-pointer">
-								<Link href={"/edit"}>
+								<Link href={`/${uid}`}>
 									<UserPenIcon />
 								</Link>
 							</Button>
