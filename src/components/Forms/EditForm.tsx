@@ -4,7 +4,10 @@ import { formSchema, FormSchemaType } from "@/lib/zodSchema";
 import editUser from "@/server/editUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderIcon, UserPenIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { User } from "../../../generated/prisma/client";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
 import { Input } from "../shadcnui/input";
@@ -17,27 +20,43 @@ import {
 } from "../shadcnui/select";
 import { Textarea } from "../shadcnui/textarea";
 
-const EditForm = () => {
+type EditFormProps = {
+	editUData: User;
+};
+
+const EditForm = ({ editUData }: EditFormProps) => {
+	const { push } = useRouter();
+
 	const {
 		handleSubmit,
 		control,
 		formState: { isSubmitting },
+		reset,
 	} = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			uImage: "",
-			uName: "",
-			uEmail: "",
-			uGender: "",
-			uBio: "",
-			uPhoneNumber: "",
+			uImage: editUData.uImage,
+			uName: editUData.uName,
+			uEmail: editUData.uEmail,
+			uGender: editUData.uGender,
+			uBio: editUData.uBio,
+			uPhoneNumber: editUData.uPhoneNumber,
 		},
 		mode: "all",
 	});
 
 	const handleEditForm = async (editUserData: FormSchemaType) => {
+		const { isSuccess, message } = await editUser(editUserData, editUData.uid);
+
 		await new Promise((r) => setTimeout(r, 1500));
-		editUser(editUserData);
+
+		if (isSuccess) {
+			toast.success(message);
+			reset();
+			push("/");
+		} else {
+			toast.error(message);
+		}
 	};
 
 	return (
