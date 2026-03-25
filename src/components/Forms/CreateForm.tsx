@@ -2,6 +2,7 @@
 
 import { formSchema, FormSchemaType } from "@/lib/zodSchema";
 import createUser from "@/server/createUser";
+import { faker } from "@faker-js/faker/locale/en_IN";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderIcon, SparklesIcon, UserRoundPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -19,7 +20,6 @@ import {
 } from "../shadcnui/select";
 import { Separator } from "../shadcnui/separator";
 import { Textarea } from "../shadcnui/textarea";
-
 const CreateForm = () => {
 	const { push } = useRouter();
 
@@ -28,6 +28,7 @@ const CreateForm = () => {
 		control,
 		formState: { isSubmitting },
 		reset,
+		setValue,
 	} = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -53,6 +54,34 @@ const CreateForm = () => {
 		} else {
 			toast.error(message);
 		}
+	};
+
+	const generateDetails = () => {
+		const { person, internet, phone, image } = faker;
+
+		const uGender = person.sexType();
+		const uFirstname = person.firstName(uGender);
+		const uLastname = person.lastName(uGender);
+		const uFullName = `${uFirstname} ${uLastname}`;
+		const uEmail = internet
+			.email({
+				firstName: uFirstname,
+				lastName: uLastname,
+			})
+			.toLowerCase();
+
+		const uBio = person.bio();
+		const uPhoneNumber = phone.number({ style: "international" });
+		const uImage = image.url();
+
+		setValue("uName", uFullName);
+
+		setValue("uEmail", uEmail);
+		console.log();
+		setValue("uGender", uGender);
+		console.log(uBio);
+		console.log(uPhoneNumber);
+		console.log(uImage);
 	};
 
 	return (
@@ -200,6 +229,7 @@ const CreateForm = () => {
 
 			<Button
 				type="button"
+				onClick={generateDetails}
 				variant={"outline"}
 				className="cursor-pointer">
 				<SparklesIcon /> Generate
