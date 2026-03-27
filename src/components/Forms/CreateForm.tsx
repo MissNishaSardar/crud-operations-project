@@ -60,9 +60,13 @@ const CreateForm = () => {
 		const { person, internet, phone, image } = faker;
 
 		const uGender = person.sexType();
+
 		const uFirstname = person.firstName(uGender);
+
 		const uLastname = person.lastName(uGender);
+
 		const uFullName = `${uFirstname} ${uLastname}`;
+
 		const uEmail = internet
 			.email({
 				firstName: uFirstname,
@@ -71,17 +75,17 @@ const CreateForm = () => {
 			.toLowerCase();
 
 		const uBio = person.bio();
+
 		const uPhoneNumber = phone.number({ style: "international" });
-		const uImage = image.url();
+
+		const uImage = image.url({ height: 334, width: 334 });
 
 		setValue("uName", uFullName);
-
 		setValue("uEmail", uEmail);
-		console.log();
 		setValue("uGender", uGender);
-		console.log(uBio);
-		console.log(uPhoneNumber);
-		console.log(uImage);
+		setValue("uBio", uBio);
+		setValue("uPhoneNumber", uPhoneNumber);
+		setValue("uImage", uImage);
 	};
 
 	return (
