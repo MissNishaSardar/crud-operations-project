@@ -76,7 +76,9 @@ const CreateForm = () => {
 
 		const uBio = person.bio();
 
-		const uPhoneNumber = phone.number({ style: "international" });
+		const uPhoneNumber = phone
+			.number({ style: "international" })
+			.replace(/^\+\d{1,3}/, "");
 
 		const uImage = image.url({ height: 334, width: 334 });
 
