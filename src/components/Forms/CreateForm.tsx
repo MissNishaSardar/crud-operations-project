@@ -20,6 +20,7 @@ import {
 } from "../shadcnui/select";
 import { Separator } from "../shadcnui/separator";
 import { Textarea } from "../shadcnui/textarea";
+
 const CreateForm = () => {
 	const { push } = useRouter();
 
@@ -29,6 +30,7 @@ const CreateForm = () => {
 		formState: { isSubmitting },
 		reset,
 		setValue,
+		getValues,
 	} = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -58,6 +60,7 @@ const CreateForm = () => {
 
 	const generateDetails = () => {
 		const { person, internet, phone, image } = faker;
+		const current = getValues();
 
 		const uGender = person.sexType();
 
@@ -78,16 +81,32 @@ const CreateForm = () => {
 
 		const uPhoneNumber = phone
 			.number({ style: "international" })
-			.replace(/^\+\d{1,3}/, "");
+			.replace(/\D/g, "")
+			.slice(-10);
 
 		const uImage = image.url({ height: 334, width: 334 });
 
-		setValue("uName", uFullName);
-		setValue("uEmail", uEmail);
-		setValue("uGender", uGender);
-		setValue("uBio", uBio);
-		setValue("uPhoneNumber", uPhoneNumber);
-		setValue("uImage", uImage);
+		if (!current.uName) {
+			setValue("uName", uFullName);
+		}
+
+		if (!current.uEmail) {
+			setValue("uEmail", uEmail);
+		}
+
+		if (!current.uGender) {
+			setValue("uGender", uGender);
+		}
+
+		if (!current.uBio) {
+			setValue("uBio", uBio);
+		}
+		if (!current.uPhoneNumber) {
+			setValue("uPhoneNumber", uPhoneNumber);
+		}
+		if (!current.uImage) {
+			setValue("uImage", uImage);
+		}
 	};
 
 	return (
